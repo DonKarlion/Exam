@@ -1,4 +1,4 @@
-п»ї#include<iostream>
+#include<iostream>
 #include"Functions.h"
 #pragma warning(disable:4996)
 
@@ -7,15 +7,15 @@ using namespace std;
 int main()
 {
 	user* human = nullptr;
-	int size = 0; //Р РѕР·РјС–СЂ РјР°СЃРёРІСѓ РіСЂСѓРї СЃС‚СЂСѓРєС‚СѓСЂРё
-	bool job = true; //Р‘СѓР»РєР° РґР»СЏ РјРµРЅСЋ
-	int choise; //Р РѕР±РѕС‚Р° РІ РјРµРЅСЋ
-	int index = 0; //Р†РЅРґРµРєСЃ Р»СЋРґРёРЅРё Р·С– СЃРїРёСЃРєСѓ
-	char filename[100];
+	int size = 0; //Розмір масиву груп структури
+	bool job = true; //Булка для меню
+	int choise; //Робота в меню
+	int index = 0; //Індекс людини зі списку
+	char filename[100]; //Буфєр
 
 	while (job)
 	{
-		cout << " ______________________ \n" // РљСЂР°СЃРёРІРµ РјРµРЅСЋ
+		cout << " ______________________ \n" 
 			"|         MENU         |\n"
 			"|1 - Add new user      |\n"
 			"|2 - Show              |\n"
@@ -30,16 +30,25 @@ int main()
 			"|0 - Exit              |\n"
 			"|______________________|\n"
 			"\nYour choise: ";
-		cin >> choise; //Р—Р°РїСЂРѕСЃРёР»Рё РІРёР±С–СЂ
+
+		cin >> choise; 
 		switch (choise)
 		{
 		case 1:
 			cin.ignore();
+
 			Add(human, size);
 			break;
 		case 2:
+			if (size == 0)
+			{
+				cout << "Empty phone book!" << endl;
+				break;
+			}
+
 			cout << "Choose:\n1-Show all\n2-Show some group\nYour choise: ";
 			cin >> choise;
+
 			if (choise == 1)
 			{
 				Show(human, size, 0);
@@ -49,6 +58,7 @@ int main()
 
 				cout << "Which group?\n1-Family\n2-Work\n3-Favorites\nYour choise: ";
 				cin >> choise;
+
 				if (choise > 0 && choise < 4)
 				{
 					Show(human, size, choise);
@@ -64,20 +74,34 @@ int main()
 			}
 			break;
 		case 3:
+			if (size == 0)
+			{
+				cout << "Empty phone book!" << endl;
+				break;
+			}
+
 			index = Search(human, size);
 			break;
 		case 4:
+			if (size == 0)
+			{
+				cout << "Empty phone book!" << endl;
+				break;
+			}
+
 			cout << "What you want to edit?\n1-Name\n2-Phone\n3-Email\n4-Group\nYour choise: ";
 			cin >> choise;
+
 			if (choise > 0 && choise < 5)
 			{
 				do
 				{
 					cout << "Enter user's index: ";
 					cin >> index;
-				}while (index < 0 || index > size - 1);
+				} while (index < 0 || index > size - 1);
 
 				Editing(human, size, choise, index);
+
 				cout << "Done!" << endl;
 			}
 			else
@@ -86,14 +110,21 @@ int main()
 			}
 			break;
 		case 5:
+			if (size == 0)
+			{
+				cout << "Empty phone book!" << endl;
+				break;
+			}
+
 			cout << "Choose:\n1-Delete with name\n2-Delete with index\nYour choise: ";
 			cin >> choise;
-
+			
 			if (choise == 1)
 			{
 				index = Search(human, size);
+
 				if (index != -1)
-					Delete(human,size,index);
+					Delete(human, size, index);
 			}
 			else if (choise == 2)
 			{
@@ -111,44 +142,76 @@ int main()
 			}
 			break;
 		case 6:
-			cout << "Done!" << endl;
+			if (size == 0)
+			{
+				cout << "Empty phone book!" << endl;
+				break;
+			}
+
 			Sort(human, size);
+
+			cout << "Done!" << endl;
 			break;
 		case 7:
+			if (size == 0)
+			{
+				cout << "Empty phone book!" << endl;
+				break;
+			}
+
 			index = FastAccess(human, size);
+
 			cout << "Done" << endl;
+
 			break;
 		case 8:
+			if (size == 0)
+			{
+				cout << "Empty phone book!" << endl;
+				break;
+			}
+
 			cin.ignore();
+
 			cout << "Enter filename (.csv): ";
 			cin.getline(filename, 100);
+
 			Write(human, size, filename);
+
 			cout << "Done" << endl;
 			break;
 		case 9:
 			cin.ignore();
+
 			cout << "Enter filename\n";
 			cin.getline(filename, 100);
-			Read(human, size, filename); 
+
+			Read(human, size, filename);
+
 			cout << "Done" << endl;
 			break;
 		case 10:
 			cin.ignore();
+
 			cout << "Enter filename\n";
 			cin.getline(filename, 100);
+
 			ReadAdd(human, size, filename);
+
 			cout << "Done" << endl;
 			break;
 		case 0:
 			cout << "Bye!" << endl;
+
 			job = 0;
 			break;
 		default:
 			cout << "Wrong choise, try again!" << endl;
+
 			break;
 		}
 	}
-	for (int i = 0; i < size; i++) //Р—Р°С‡РёС‰Р°С”РјРѕ РїР°Рј'СЏС‚СЊ
+	for (int i = 0; i < size; i++) //Зачищаємо пам'ять
 	{
 		delete[] human[i].name;
 		delete[] human[i].phone;
